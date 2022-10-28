@@ -24,13 +24,14 @@ pipeline {
 //                 withCredentials([usernamePassword(credentialsId: 'AWSCredentials', passwordVariable: 'Key', usernameVariable: 'User')]) {$class:'AmazonWebServicesCredentialsBinding',
                    withAWS(credentials: 'AWSCredentials'){
                     sh """ #!/bin/bash
-                    # docker login -u rathijaat001 -p $dockerKey
-                    #docker tag rathijaat001/blogpost:$BUILD_NUMBER rathijaat001/blogpost:$BUILD_NUMBER
-                    #docker push rathijaat001/blogpost:$BUILD_NUMBER
-                    
+                                       
                     aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 548893471177.dkr.ecr.us-east-1.amazonaws.com
                     docker tag rathijaat001/blogpost:$BUILD_NUMBER 548893471177.dkr.ecr.us-east-1.amazonaws.com/blogpost:$BUILD_NUMBER
                     docker push 548893471177.dkr.ecr.us-east-1.amazonaws.com/blogpost:$BUILD_NUMBER
+                    
+                    #docker login -u rathijaat001 -p $dockerKey
+                    #docker tag rathijaat001/blogpost:$BUILD_NUMBER rathijaat001/blogpost:$BUILD_NUMBER
+                    #docker push rathijaat001/blogpost:$BUILD_NUMBER
                 """
                 }
                 
