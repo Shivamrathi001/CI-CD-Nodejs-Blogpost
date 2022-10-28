@@ -13,26 +13,23 @@ pipeline {
         } 
         stage('Building our image') { 
             steps {
-                // script { 
-                //     // dockerImage = docker.build registry + ":$BUILD_NUMBER" 
                     sh """ #!/bin/bash
                         docker build -t rathijaat001/blogpost:$BUILD_NUMBER .
                     """
                 }
-            // } 
+           
         }
         stage('Deploy our image') { 
             steps { 
-                // script { 
-                //     docker.withRegistry( '', registryCredential ) { 
-                //         dockerImage.push() 
-                //     }
-                // } 
-                withCredentials([usernamePassword(credentialsId: 'Dockerhub', passwordVariable: 'dockerKey', usernameVariable: 'dockerUser')]) {
+                withCredentials([$class:'AmazonWebServicesCredentialsBinding', usernamePassword(credentialsId: 'AWSCredentials', passwordVariable: 'Key', usernameVariable: 'User')]) {
                     sh """ #!/bin/bash
-                    docker login -u rathijaat001 -p $dockerKey
-                    docker tag rathijaat001/blogpost:$BUILD_NUMBER rathijaat001/blogpost:$BUILD_NUMBER
-                    docker push rathijaat001/blogpost:$BUILD_NUMBER
+                    # docker login -u rathijaat001 -p $dockerKey
+                    #docker tag rathijaat001/blogpost:$BUILD_NUMBER rathijaat001/blogpost:$BUILD_NUMBER
+                    #docker push rathijaat001/blogpost:$BUILD_NUMBER
+                    
+                    aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 548893471177.dkr.ecr.us-east-1.amazonaws.com
+                    docker tag rathijaat001/blogpost:$BUILD_NUMBER 548893471177.dkr.ecr.us-east-1.amazonaws.com/blogpost:$BUILD_NUMBER
+                    docker push 548893471177.dkr.ecr.us-east-1.amazonaws.com/blogpost:$BUILD_NUMBER
                 """
                 }
                 
