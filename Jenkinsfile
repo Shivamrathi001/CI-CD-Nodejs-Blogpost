@@ -22,7 +22,7 @@ pipeline {
         stage('Deploy our image') { 
             steps { 
 //                 withCredentials([usernamePassword(credentialsId: 'AWSCredentials', passwordVariable: 'Key', usernameVariable: 'User')]) {$class:'AmazonWebServicesCredentialsBinding',
-                   withAWS([credentialsId: 'AWSCredentials']){
+                   withAWS(credentials: 'AWSCredentials'){
                     sh """ #!/bin/bash
                     # docker login -u rathijaat001 -p $dockerKey
                     #docker tag rathijaat001/blogpost:$BUILD_NUMBER rathijaat001/blogpost:$BUILD_NUMBER
