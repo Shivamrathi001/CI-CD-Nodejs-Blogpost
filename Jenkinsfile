@@ -9,7 +9,7 @@ pipeline {
     stages { 
         stage('Cloning our Git') { 
             steps { 
-                git 'https://github.com/rathi001/blogpost.git' 
+                git 'https://github.com/Shivamrathi001/CI-CD-Nodejs-Blogpost.git' 
             }
         } 
         stage('Building our image') { 
