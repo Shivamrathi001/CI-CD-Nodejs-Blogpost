@@ -26,8 +26,8 @@ pipeline {
                    withAWS(credentials: 'AWSCredentials'){
                     sh """ #!/bin/bash                  
                     aws ecr get-login-password --region $region | docker login --username AWS --password-stdin $registry
-                    docker tag $dockerImage:$BUILD_NUMBER $registry/$dockerImage:$BUILD_NUMBER
-                    docker push $registry/$dockerImage:$BUILD_NUMBER
+                    docker tag $dockerImage:$BUILD_NUMBER $registry/$dockerImage:latest
+                    docker push $registry/$dockerImage:latest
                     
                 """
                 }
