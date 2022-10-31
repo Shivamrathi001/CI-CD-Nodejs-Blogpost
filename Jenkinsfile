@@ -27,13 +27,13 @@ pipeline {
                     sh """ #!/bin/bash 
                     ls
                     pwd
-                    #zip -r blogpost.zip  
+                    zip -r blogpost.zip appspec.yml scripts
                     ls
-                    #aws s3 cp blogpost.zip s3://cicd-demo-jenkins/blogpost.zip
-                    #aws ecr get-login-password --region $region | docker login --username AWS --password-stdin $registry
-                    #docker tag $dockerImage:$BUILD_NUMBER $registry/$dockerImage:latest
-                    #docker push $registry/$dockerImage:latest
-                    #aws deploy create-deployment --application-name "blogpost" --deployment-group-name 'blogpost-dev' --s3-location "bucket='cicd-demo-jenkins',key=blogpost.zip,bundleType=zip"
+                    aws s3 cp blogpost.zip s3://cicd-demo-jenkins/blogpost.zip
+                    aws ecr get-login-password --region $region | docker login --username AWS --password-stdin $registry
+                    docker tag $dockerImage:$BUILD_NUMBER $registry/$dockerImage:latest
+                    docker push $registry/$dockerImage:latest
+                    aws deploy create-deployment --application-name "blogpost" --deployment-group-name 'blogpost-dev' --s3-location "bucket='cicd-demo-jenkins',key=blogpost.zip,bundleType=zip"
                 """
                 }
                 
