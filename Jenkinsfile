@@ -25,7 +25,7 @@ pipeline {
 //                 withCredentials([usernamePassword(credentialsId: 'AWSCredentials', passwordVariable: 'Key', usernameVariable: 'User')]) {$class:'AmazonWebServicesCredentialsBinding',
                    withAWS(credentials: 'AWSCredentials'){
                     sh """ #!/bin/bash 
-                    zip -r blogpost.zip ./ -x \*.git\*
+                    zip -r blogpost.zip  appspec.yml scripts
                     ll
                     aws s3 cp blogpost.zip s3://cicd-demo-jenkins/blogpost.zip
                     aws ecr get-login-password --region $region | docker login --username AWS --password-stdin $registry
