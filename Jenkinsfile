@@ -1,8 +1,9 @@
 pipeline { 
     environment { 
-        registry = "rathijaat001/blogpost" 
+        registry = "548893471177.dkr.ecr.us-east-1.amazonaws.com" 
         // registryCredential = credentials('Dockerhub') 
         dockerImage = 'blogpost' 
+        region = 'us-east-1'
     }
     agent any 
     stages { 
@@ -14,7 +15,7 @@ pipeline {
         stage('Building our image') { 
             steps {
                     sh """ #!/bin/bash
-                        docker build -t rathijaat001/blogpost:$BUILD_NUMBER .
+                        docker build -t $dockerImage:$BUILD_NUMBER .
                     """
                 }
            
@@ -24,9 +25,9 @@ pipeline {
 //                 withCredentials([usernamePassword(credentialsId: 'AWSCredentials', passwordVariable: 'Key', usernameVariable: 'User')]) {$class:'AmazonWebServicesCredentialsBinding',
                    withAWS(credentials: 'AWSCredentials'){
                     sh """ #!/bin/bash                  
-                    aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 548893471177.dkr.ecr.us-east-1.amazonaws.com
-                    docker tag rathijaat001/blogpost:$BUILD_NUMBER 548893471177.dkr.ecr.us-east-1.amazonaws.com/blogpost:$BUILD_NUMBER
-                    docker push 548893471177.dkr.ecr.us-east-1.amazonaws.com/blogpost:$BUILD_NUMBER
+                    aws ecr get-login-password --region $region | docker login --username AWS --password-stdin $registry
+                    docker tag $dockerImage:$BUILD_NUMBER $registry/$dockerImage:$BUILD_NUMBER
+                    docker push $registry/$dockerImage:$BUILD_NUMBER
                     
                 """
                 }
@@ -35,7 +36,7 @@ pipeline {
         } 
         stage('Cleaning up') { 
             steps { 
-                sh "docker rmi $registry:$BUILD_NUMBER"
+                sh "docker rmi $dockerImage:$BUILD_NUMBER"
             }
         }
     }
