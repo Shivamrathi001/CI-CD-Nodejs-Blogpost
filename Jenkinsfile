@@ -27,7 +27,7 @@ pipeline {
                     sh """ #!/bin/bash 
                     ls
                     pwd
-                    zip -r blogpost.zip appspec.yml scripts
+                    zip -r blogpost.zip ./
                     ls
                     aws s3 cp blogpost.zip s3://cicd-demo-jenkins/blogpost.zip
                     aws ecr get-login-password --region $region | docker login --username AWS --password-stdin $registry
